@@ -1,0 +1,55 @@
+pipeline{
+  agent any
+  tools{
+       maven 'mymaven'
+       jdk 'JDK11'
+   }
+  stages {
+    stage('Build'){
+       steps {
+                withSonarQubeEnv('sonar-server') {
+                 
+                        sh 'mvn clean package sonar:sonar'
+                    
+                }
+            }
+     }
+    stage('Test'){
+      steps{
+        sh 'mvn test'
+      }
+      }
+     stage('collect artifact'){
+     steps{
+     archiveArtifacts artifacts: 'target/*.jar', followSymlinks: false
+     }
+     }
+     stage('deploy to artifactory')
+     {
+     steps{
+     
+     rtUpload (
+    serverId: 'artifactory-server',
+    spec: '''{
+          "files": [
+            {
+              "pattern": "target/*.jar",
+              "target": "art-doc-dev-loc"
+            }
+         ]
+    }''',
+ 
+    // Optional - Associate the uploaded files with the following custom build name and build number,
+    // as build artifacts.
+    // If not set, the files will be associated with the default build name and build number (i.e the
+    // the Jenkins job name and number).
+    buildName: 'holyFrog',
+    buildNumber: '42'
+)
+     }}
+       
+      
+  
+  }
+  }
+
