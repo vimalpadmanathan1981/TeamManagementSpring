@@ -59,7 +59,7 @@ pipeline{
 )
      }}
 
-     stage("deploy to artifactory"){
+     stage("deploy to ec2"){
        steps{
             sshagent(['fb6287dd-0b69-406a-88b3-16309ea4d52a']){
                     sh 'scp -r /var/jenkins_home/workspace/artifactory-pipeline/target/*.jar ubuntu@18.221.138.29:/home/ubuntu/artifact'
