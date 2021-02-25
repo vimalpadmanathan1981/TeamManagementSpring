@@ -47,7 +47,7 @@ pipeline{
             steps{
      
                 rtDownload (
-                    serverId: 'artifactory-server',
+                    serverId: 'ARTIFACTORY_SERVER',
                     spec: '''{
                     "files": [
                          {
@@ -62,8 +62,8 @@ pipeline{
 
      stage("deploy to ec2"){
        steps{
-            sshagent(['fb6287dd-0b69-406a-88b3-16309ea4d52a']){
-                    sh 'scp -r /var/jenkins_home/workspace/artifactory-pipeline/target/*.jar ubuntu@18.221.138.29:/home/ubuntu/artifact'
+            sshagent(['25b26cdc-1bf3-4293-baa3-e6af5a3c1005']){
+                    sh 'scp -r /var/jenkins_home/workspace/spring-pipeline2/target/*.jar ubuntu@18.236.71.248:/home/ubuntu/artifact'
         }
        }
      }
