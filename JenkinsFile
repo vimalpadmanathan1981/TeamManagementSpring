@@ -63,7 +63,7 @@ pipeline{
      stage("deploy to ec2"){
        steps{
             sshagent(['25b26cdc-1bf3-4293-baa3-e6af5a3c1005']){
-                    sh 'scp -r var/jenkins_home/workspace/spring-pipeline2/target/*.jar ubuntu@18.236.71.248:/home/ubuntu/artifact'
+                    sh 'scp -r /var/jenkins_home/workspace/sonar-pipeline2/target/*.jar ubuntu@18.236.71.248:/home/ubuntu/artifact'
         }
        }
      }
