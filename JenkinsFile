@@ -18,7 +18,21 @@ pipeline{
         sh 'mvn test'
       }
       }
-     stage('collect artifact'){
+    stage("Build & SonarQube analysis") {
+            agent any
+            steps {
+              withSonarQubeEnv('springservice') {
+                sh 'java -version'
+                sh 'mvn clean package sonar:sonar'
+              }
+            }
+          }
+    stage("Quality gate") {
+            steps {
+                waitForQualityGate abortPipeline: true
+            }
+        }
+    stage('collect artifact'){
      steps{
      archiveArtifacts artifacts: 'target/*.jar', followSymlinks: false
      }
