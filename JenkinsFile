@@ -82,6 +82,16 @@ pipeline{
         }
        }
      }
+    stage("deploy artifact to s3"){
+       steps{
+         withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'deploytos3', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+            s3Upload(pathStyleAccessEnabled: true, payloadSigningEnabled: true,file:'TeamManagement-0.0.1-SNAPSHOT-${BUILD_NUMBER}.jar', bucket:'cloud-095435475561-bucket', path:'var/jenkins_home/workspace/sonar-pipeline2/target/TeamManagement-0.0.1-SNAPSHOT-${BUILD_NUMBER}.jar')
+        
+        
+        
+        }
+        }
+        }
        
       
   
