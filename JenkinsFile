@@ -21,62 +21,19 @@ pipeline{
     stage("Build & SonarQube analysis") {
             agent any
             steps {
-              withSonarQubeEnv('SonarSpring') {
+              withSonarQubeEnv('sonar-team') {
                 sh 'java -version'
                 sh 'mvn clean package sonar:sonar'
               }
             }
           }
-           stage("Quality gate") {
+           /* stage("Quality gate") {
             steps {
                 waitForQualityGate abortPipeline: true
             }
         }
-  
-    stage('collect artifact'){
-     steps{
-     archiveArtifacts artifacts: 'target/*.jar', followSymlinks: false
-     }
-     }
-     stage('deploy to artifactory')
-     {
-     steps{
+        */
      
-     rtUpload (
-    serverId: 'ARTIFACTORY_SERVER',
-    spec: '''{
-          "files": [
-            {
-              "pattern": "target/*.jar",
-              "target": "art-doc-dev-loc"
-            }
-         ]
-    }''',
- 
-    buildName: 'holyFrog',
-    buildNumber: '42'
-)
-     }}
-     stage('download from artifactory')
-         {
-            steps{
-     
-                rtDownload (
-                    serverId: 'ARTIFACTORY_SERVER',
-                    spec: '''{
-                    "files": [
-                         {
-                             "pattern": "art-doc-dev-loc/",
-                             "target": ""
-                        }
-                     ]
-                }''',
- 
-)
-     }}
-     
-    
-  }
  
   }
 
